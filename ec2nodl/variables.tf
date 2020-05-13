@@ -3,6 +3,11 @@ variable "ami_name_regex" {
   default = "ami-0f7919c33c90f5b58"
 }
 
+variable "azs" {
+  type = list
+  default = ["1a","1b","1c"]
+}
+
 variable "custom_userdata" {
   description = "custom_userdata or empty for nothing"
   default = ""
@@ -13,8 +18,13 @@ variable "counter" {
   default = "1"
 }
 
+variable "vpc_id" {
+  description = "ID of the Subnet to create ENI"
+}
+
 variable "subnet_id" {
   description = "ID of the Subnet to create ENI"
+  default = ""
 }
 
 variable "sg_ids" {

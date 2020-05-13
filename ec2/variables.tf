@@ -18,6 +18,11 @@ variable "counter" {
   default = "1"
 }
 
+variable "subnet_id" {
+  description = "ID of the Subnet to create ENI"
+  default = ""
+}
+
 variable "ssh_pub_developer" {
   description = "Recommended: empty"
   default = ""

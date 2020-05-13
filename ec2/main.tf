@@ -20,7 +20,7 @@ data "aws_security_group" "tier_sg" {
     }
 }
 
-module "ec2" {
+module "ec2creation" {
   source = "../ec2nodl"
   
   counter = var.counter
@@ -28,7 +28,8 @@ module "ec2" {
   //ssh_pub_developer = var.ssh_pub_developer
   custom_userdata = var.custom_userdata
 
-  subnet_id = module.vpc_lookups.subnet_id
+  vpc_id = module.vpc_lookups.vpc_id
+  subnet_id = var.subnet_id
   sg_ids = "${concat(list(
       module.vpc_lookups.sg_id,
       data.aws_security_group.vpc_sg.id,

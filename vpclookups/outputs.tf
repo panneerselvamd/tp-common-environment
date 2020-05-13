@@ -3,9 +3,9 @@ output "vpc_id" {
     value = data.aws_vpc.vpc.id
 }
 
-output "subnet_id" {
-    description = "Subnet ID"
-    value = data.aws_subnet.subnet.id
+output "public_subnet_id" {
+    description = "Public Subnet ID"
+    value = data.aws_subnet.public_subnet.id
 }
 
 output "sg_id" {

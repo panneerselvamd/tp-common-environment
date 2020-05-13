@@ -8,9 +8,22 @@ data "aws_ami" "ami" {
     }
 }
 
+data "aws_availability_zones" "available" {
+    state = "available"
+}
+
+data "aws_subnet" "private" {
+    count = var.counter
+    vpc_id = var.vpc_id
+
+    tags = {
+        Name = "internal-private-${element(var.azs, count.index)}"
+    }
+}
+
 resource "aws_network_interface" "eni" {
     count = var.counter
-    subnet_id = var.subnet_id
+    subnet_id = var.subnet_id == "" ? data.aws_subnet.private.*.id[count.index] : var.subnet_id
     security_groups = var.sg_ids
     tags = {
         _ReservedDnsName = "${format("${var.short_name}%02d-%s", count.index, var.metadata["datacenter"])}"
@@ -21,6 +34,7 @@ resource "aws_instance" "instance" {
     ami = data.aws_ami.ami.id
     instance_type = local.instance_type
     count = var.counter
+    
     network_interface {
         device_index = 0
         network_interface_id = aws_network_interface.eni.*.id[count.index]
@@ -56,7 +70,7 @@ resource "aws_ebs_volume" "volume-data" {
     count = local.data_volume_count
     size = var.data_volume_size
     type = var.data_volume_type
-    availability_zone = "us-east-2b"
+    availability_zone = data.aws_availability_zones.available.names[count.index]
     tags = {
         Name = "${var.short_name}-${count.index}-data"
     }

@@ -8,5 +8,5 @@ locals {
 
 output "mongo_eip" {
     description = "Mongo Elastic IP"
-    value = ["${module.mongo.eip}"]
+    value = ["${module.ec2mongo.eip}"]
 }
